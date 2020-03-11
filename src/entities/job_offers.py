@@ -1,6 +1,5 @@
 import json
-
-class JobOffer:
+class JobOffer(json.JSONEncoder):
 
     def __init__(self, job_title, company_name, application_link):
         self.__job_title = job_title
@@ -27,6 +26,5 @@ class JobOffer:
                 "Company Name": self.__company_name,
                 "Application Link": self.__application_link}
 
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, 
-            sort_keys=True, indent=4)
+    def default(self, o):
+        return {k.lstrip('_'): v for k, v in vars(o).items()}

@@ -1,7 +1,7 @@
 from time import time
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-# from pandas import pandas
+import json
 
 from services.ejobs import job_service as ejobs_job_service
 from services.indeed import job_service as indeed_job_service
@@ -12,11 +12,8 @@ from services import link_shortener
 app = Flask(__name__)
 CORS(app)
 
-# @app.route("/jobs?j=<job_name>&l=<job_location>")
-@app.route("/jobs")
-def get_jobs():
-    job_name="Java"
-    job_location="Cluj-Napoca"
+@app.route("/jobs/<job_name>/<job_location>")
+def get_jobs(job_name, job_location):
     print("[INFO] - Extracting ro.indeed.com offers...")
     start = time()
     indeed_offers = indeed_job_service.get_job_offers(job_name, job_location)
@@ -37,8 +34,11 @@ def get_jobs():
     
     job_offers = indeed_offers + ejobs_offers + hipo_offers
 
-    print("[INFO] - Shortening links...")
+    # print("[INFO] - Shortening links...")
     # job_offers = link_shortener.shorten(job_offers)
+
+    return json.dumps(job_offers, default = lambda x: x.default(x))
+    
  
 if __name__ == '__main__':
     app.run(debug=True)
