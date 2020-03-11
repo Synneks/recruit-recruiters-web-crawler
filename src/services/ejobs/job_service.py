@@ -5,8 +5,6 @@ from entities.job_offers import JobOffer
 
 
 def get_job_offers(job_title, job_location):
-    # TODO poti cauta doar dupa locatie si fara job title https://www.ejobs.ro/locuri-de-munca/brasov/
-    # TODO poti cauta doar job_title fara locatie https://www.ejobs.ro/locuri-de-munca/cluj-napoca/?cauta=Java
     job_offers = []
     try:
         url = f"https://www.ejobs.ro/locuri-de-munca/{job_location}/?cauta={job_title}"

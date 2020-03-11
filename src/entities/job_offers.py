@@ -1,3 +1,5 @@
+import json
+
 class JobOffer:
 
     def __init__(self, job_title, company_name, application_link):
@@ -24,3 +26,7 @@ class JobOffer:
         return {"Job Title": self.__job_title,
                 "Company Name": self.__company_name,
                 "Application Link": self.__application_link}
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, 
+            sort_keys=True, indent=4)
