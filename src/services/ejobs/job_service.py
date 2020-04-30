@@ -4,26 +4,28 @@ from bs4 import BeautifulSoup
 from entities.job_offers import JobOffer
 
 
-def get_job_offers(job_title, job_location):
-    job_offers = []
+def get_job_offers(job_title, job_location, page_number):
     try:
-        url = f"https://www.ejobs.ro/locuri-de-munca/{job_location}/?cauta={job_title}"
+        if page_number > 0:
+            url = f"https://www.ejobs.ro/locuri-de-munca/{job_location}/pagina{page_number}/?cauta={job_title}"
+        else:
+            url = f"https://www.ejobs.ro/locuri-de-munca/{job_location}/?cauta={job_title}"
         page = requests.get(url)
         soup = BeautifulSoup(page.content, "html.parser")
-        
+
         job_list = soup.find(id="job-app-list")
         job_card_tags = job_list.find_all("div", {"class": "jobitem-inner"})
-        job_offers = create_job_offers(job_card_tags)
-    except Exception  as e:
-        print("[ERROR] - Failed to get job offers from hipo.ro \n", e.args)
-    return job_offers
+        return create_job_offers(job_card_tags)
+    except Exception as e:
+        print("[ERROR] - Failed to get job offers from ejobs.ro \n", e.args)
+    return []
 
 
 def create_job_offers(job_card_tags):
     job_offers = []
     for job_card_tag in job_card_tags:
-        title = job_card_tag.find("a", {"class": "title dataLayerItemLink"}).get_text()
-        company_name = job_card_tag.find("a", {"class": "company"}).get_text().strip()
+        title = job_card_tag.find("a", {"class": "title dataLayerItemLink"}).get_text().strip()
+        company_name = job_card_tag.find("a", {"class": "title dataLayerItemLink"}).get_text().strip()
         application_url = get_application_link(job_card_tag)
         job_offer = JobOffer(title, company_name, application_url)
         job_offers.append(job_offer)

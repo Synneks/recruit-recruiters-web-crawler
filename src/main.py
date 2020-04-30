@@ -12,33 +12,35 @@ from services import link_shortener
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/jobs/<job_name>/<job_location>")
-def get_jobs(job_name, job_location):
+
+@app.route("/jobs/<job_name>/<job_location>/<page_number>")
+def get_jobs(job_name, job_location, page_number):
+    page_number = int(page_number)
     print("[INFO] - Extracting ro.indeed.com offers...")
     start = time()
-    indeed_offers = indeed_job_service.get_job_offers(job_name, job_location)
+    indeed_offers = indeed_job_service.get_job_offers(job_name, job_location, page_number)
     end = time()
     print(f"[INFO] - Extracted {len(indeed_offers)} offers from ro.indeed.com in {end - start} seconds")
 
     print("[INFO] - Extracting ejobs.ro offers...")
     start = time()
-    ejobs_offers = ejobs_job_service.get_job_offers(job_name, job_location)
+    ejobs_offers = ejobs_job_service.get_job_offers(job_name, job_location, page_number)
     end = time()
     print(f"[INFO] - Extracted {len(ejobs_offers)} offers from ejobs.ro in {end - start} seconds")
 
     print("[INFO] - Extracting hipo.ro offers...")
     start = time()
-    hipo_offers = hipo_job_service.get_job_offers(job_name, job_location)
+    hipo_offers = hipo_job_service.get_job_offers(job_name, job_location, page_number)
     end = time()
     print(f"[INFO] - Extracted {len(hipo_offers)} offers from hipo.ro in {end - start} seconds")
-    
+
     job_offers = indeed_offers + ejobs_offers + hipo_offers
 
     # print("[INFO] - Shortening links...")
     # job_offers = link_shortener.shorten(job_offers)
 
-    return json.dumps(job_offers, default = lambda x: x.default(x))
-    
- 
+    return json.dumps(job_offers, default=lambda x: x.default(x))
+
+
 if __name__ == '__main__':
     app.run(debug=True)

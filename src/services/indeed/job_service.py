@@ -4,17 +4,22 @@ from bs4 import BeautifulSoup
 from entities.job_offers import JobOffer
 
 
-def get_job_offers(job_title, job_location):
+def get_job_offers(job_title, job_location, page_number):
     try:
-        url = f"https://ro.indeed.com/jobs?q={job_title}&l={job_location}"
+        job_title = job_title.replace("-", "+")
+        if page_number > 0:
+            page_number = (page_number - 1) * 10
+            url = f"https://ro.indeed.com/jobs?q={job_title}&l={job_location}&start={page_number}"
+        else:
+            url = f"https://ro.indeed.com/jobs?q={job_title}&l={job_location}"
         page = requests.get(url)
         soup = BeautifulSoup(page.content, "html.parser")
-        
+
         job_card_tags = soup.find_all("div", {"class": "jobsearch-SerpJobCard"})
-        job_offers = create_job_offers(job_card_tags)
-    except Exception  as e:
-        print("[ERROR] - Failed to get job offers from hipo.ro \n", e.args)
-    return job_offers
+        return create_job_offers(job_card_tags)
+    except Exception as e:
+        print("[ERROR] - Failed to get job offers from indeed.ro \n", e.args)
+    return []
 
 
 def create_job_offers(job_card_tags):
