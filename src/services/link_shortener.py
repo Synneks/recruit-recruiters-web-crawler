@@ -1,5 +1,6 @@
 from pyshorteners import Shortener
 
+
 def shorten(jobs_list):
     shortener = Shortener()
     for job in jobs_list:
