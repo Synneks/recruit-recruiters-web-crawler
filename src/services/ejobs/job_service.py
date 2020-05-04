@@ -49,9 +49,21 @@ def _create_job_offers(job_card_tags):
 def get_job_details(job_offer):
     page = requests.get(job_offer.offer_link)
     soup = BeautifulSoup(page.content, "html.parser")
-    job_offer.description = str(soup.find("div", {"class": "jobad-criteria"}))
+    job_offer.description = _get_job_criteria(soup) + _get_job_description(soup)
     job_offer.work_type = _get_work_type(soup)
     return job_offer
+
+
+def _get_job_criteria(soup):
+    return str(soup.find("div", {"class": "jobad-criteria"}))
+
+
+def _get_job_description(soup):
+    paragraphs = soup.findAll("div", {"class": "jobad-content-block"})
+    full_description = ''
+    for p in paragraphs:
+        full_description += str(p)
+    return full_description
 
 
 def _get_application_link(job_card_tag):
