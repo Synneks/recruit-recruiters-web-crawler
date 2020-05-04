@@ -35,7 +35,8 @@ def _create_job_offers(job_card_tags):
         description_page_soup = _get_soup_from_page(offer_link)
         job_offer = JobOffer(title, company_name, site, offer_link)
         job_offer.application_link = _get_best_application_link(description_page_soup, offer_link)
-        job_offer.location = job_card_tag.find("span", {"class": "location"}).get_text().strip()
+        location_tag = job_card_tag.find("span", {"class": "location"})
+        job_offer.location = location_tag.get_text().strip() if location_tag is not None else None
         image_tag = description_page_soup.find("img", {"class": "jobsearch-CompanyAvatar-image"})
         job_offer.company_image = image_tag.attrs["src"] if \
             image_tag is not None \
