@@ -55,7 +55,24 @@ def get_job_details(job_offer):
 
 
 def _get_job_criteria(soup):
-    return str(soup.find("div", {"class": "jobad-criteria"}))
+    h3_tags = []
+    content_tags = []
+    for criteria in soup.findAll("li", {"class": "Criteria__ListItem"}):
+        h3_tags.append(criteria.find("h3", {"class": "Criteria__Title"}).get_text().strip())
+        criteria_div = criteria.findAll("a", {"class": "Criteria__Link"})
+        criteria_div.extend(criteria.findAll("span", {"class": "Criteria__Properties"}))
+        content = ""
+        for word in criteria_div:
+            content += word.get_text() + ", "
+        content_tags.append(content[:-2])
+
+    criteria = "<ul> \n"
+    for index in range(len(h3_tags)):
+        criteria += f"<li> \n" \
+                    f"<span><strong>{h3_tags[index].strip()}</strong> {content_tags[index].strip()}</span> \n" \
+                    f"</li> \n"
+    criteria += "</ul> \n"
+    return criteria
 
 
 def _get_job_description(soup):
@@ -68,7 +85,7 @@ def _get_job_description(soup):
 
 def _get_application_link(job_card_tag):
     button_text = job_card_tag.find("a", {"class": "ebtn"})
-    if button_text.attrs["title"] == "Aplică extern":
+    if button_text.attrs["title"] == "Aplică extern" or button_text.attrs["title"] == "Apply externally":
         return button_text.attrs["data-external-url"]
     else:
         title_tag = job_card_tag.find("a", {"class": "title dataLayerItemLink"})
