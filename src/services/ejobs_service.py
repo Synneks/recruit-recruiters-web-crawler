@@ -6,17 +6,25 @@ from entities.JobOffer import JobOffer
 site = "ejobs"
 
 
+def create_url(job_title, job_location, page_number):
+    url = "https://www.ejobs.ro/locuri-de-munca/"
+    if job_location is not None:
+        url += f"{job_location}/"
+    if page_number is not None:
+        url = f"pagina{page_number}/"
+    if job_title is not None:
+        url += f"?cauta={job_title}"
+    return url
+
+
 def get_job_offers(job_title, job_location, page_number):
     try:
-        if page_number > 0:
-            url = f"https://www.ejobs.ro/locuri-de-munca/{job_location}/pagina{page_number}/?cauta={job_title}"
-        else:
-            url = f"https://www.ejobs.ro/locuri-de-munca/{job_location}/?cauta={job_title}"
+        url = create_url(job_title, job_location, page_number)
         page = requests.get(url)
         soup = BeautifulSoup(page.content, "html.parser")
 
         job_list = soup.find(id="job-app-list")
-        job_card_tags = job_list.find_all("div", {"class": "jobitem-inner"})
+        job_card_tags = job_list.findAll("div", {"class": "jobitem-inner"})
         return _create_job_offers(job_card_tags)
     except Exception as e:
         print("[ERROR] - Failed to get job offers from ejobs.ro \n", e.args)

@@ -2,24 +2,35 @@ import requests
 from bs4 import BeautifulSoup
 
 from entities.JobOffer import JobOffer
+from exceptions import NoResultError
 
 site = "indeed"
 
 
+def create_url(job_title, job_location, page_number):
+    if job_title is None and job_location is None:
+        raise NoResultError
+    url = "https://ro.indeed.com/jobs"
+    job_title = "" if job_title is None else job_title.replace("-", "+")
+    job_location = "" if job_location is None else job_location
+    url += f"?q={job_title}&l={job_location}"
+
+    if page_number is not None:
+        page_number = (page_number - 1) * 10
+        url += f"&start={page_number}"
+    return url
+
+
 def get_job_offers(job_title, job_location, page_number):
     try:
-        job_title = job_title.replace("-", "+")
-        if page_number > 0:
-            page_number = (page_number - 1) * 10
-            url = f"https://ro.indeed.com/jobs?q={job_title}&l={job_location}&start={page_number}"
-        else:
-            url = f"https://ro.indeed.com/jobs?q={job_title}&l={job_location}"
+        url = create_url(job_title, job_location, page_number)
         page = requests.get(url)
         soup = BeautifulSoup(page.content, "html.parser")
 
         job_card_tags = soup.find_all("div", {"class": "jobsearch-SerpJobCard"})
         return _create_job_offers(job_card_tags)
-
+    except NoResultError:
+        print("[WARNING] Indeed needs job title and job location")
     except Exception as e:
         print("[ERROR] - Failed to get job offers from indeed.ro \n", e.args)
     return []

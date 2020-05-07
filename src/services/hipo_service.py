@@ -6,13 +6,22 @@ from entities.JobOffer import JobOffer
 site = "hipo"
 
 
+def create_url(job_title, job_location, page_number):
+    url = "https://www.hipo.ro/locuri-de-munca/cautajob/Toate-Domeniile/"
+    if job_location is not None:
+        url += f"{job_location}/"
+    else:
+        url += "Toate-Orasele/"
+    if job_title is not None:
+        url += f"{job_title}/"
+    if page_number is not None:
+        url += f"{page_number}"
+    return url
+
+
 def get_job_offers(job_title, job_location, page_number):
     try:
-        if page_number > 0:
-            url = f"https://www.hipo.ro/locuri-de-munca/cautajob/Toate-Domeniile/{job_location}/{job_title}" \
-                  f"/{page_number}"
-        else:
-            url = f"https://www.hipo.ro/locuri-de-munca/cautajob/Toate-Domeniile/{job_location}/{job_title}"
+        url = create_url(job_title, job_location, page_number)
         page = requests.get(url)
         soup = BeautifulSoup(page.content, "html.parser")
 
@@ -53,8 +62,9 @@ def _get_description(soup):
 
 def _get_company_image(soup):
     company_image_div = soup.find("div", {"class": "companie-logo"})
-    return company_image_div.find("img").attrs["src"] if \
-        company_image_div.find("img").attrs["src"] is not None \
+    company_image_img = company_image_div.find("img")
+    return company_image_img.attrs["src"] if \
+        company_image_img is not None \
         else None
 
 
