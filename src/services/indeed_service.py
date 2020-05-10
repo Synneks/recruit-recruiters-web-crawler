@@ -39,7 +39,7 @@ def get_job_offers(job_title, job_location, page_number):
 def _create_job_offers(job_card_tags):
     job_offers = []
     for job_card_tag in job_card_tags:
-        title_tag = job_card_tag.find("a")
+        title_tag = job_card_tag.find("a", {"data-tn-element": "jobTitle"})
         title = title_tag.get_text().strip()
         company_name = job_card_tag.find("span", {"class": "company"}).get_text().strip()
         offer_link = "http://ro.indeed.com" + str(title_tag.attrs["href"])
