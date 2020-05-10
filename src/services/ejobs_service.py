@@ -11,7 +11,7 @@ def create_url(job_title, job_location, page_number):
     if job_location is not None:
         url += f"{job_location}/"
     if page_number is not None:
-        url = f"pagina{page_number}/"
+        url += f"pagina{page_number}/"
     if job_title is not None:
         url += f"?cauta={job_title}"
     return url
