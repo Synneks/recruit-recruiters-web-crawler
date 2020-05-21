@@ -19,26 +19,38 @@ def scrape_jobs():
     job_location = request.args.get('location')
     page_number = request.args.get('page')
     page_number = shared_service.check_page_number(page_number)
+    returned_json = {'indeed': {},
+                     'ejobs': {},
+                     'hipo': {}
+                     }
     print("[INFO] - Extracting ro.indeed.com offers...")
     start = time()
     indeed_offers = indeed_service.get_job_offers(job_title, job_location, page_number)
     end = time()
+    returned_json['indeed']['amount'] = len(indeed_offers)
+    returned_json['indeed']['time'] = float("{:.2f}".format(end - start))
     print(f"[INFO] - Extracted {len(indeed_offers)} offers from ro.indeed.com in {end - start} seconds")
 
     print("[INFO] - Extracting ejobs.ro offers...")
     start = time()
     ejobs_offers = ejobs_service.get_job_offers(job_title, job_location, page_number)
     end = time()
+    returned_json['ejobs']['amount'] = len(ejobs_offers)
+    returned_json['ejobs']['time'] = float("{:.2f}".format(end - start))
     print(f"[INFO] - Extracted {len(ejobs_offers)} offers from ejobs.ro in {end - start} seconds")
 
     print("[INFO] - Extracting hipo.ro offers...")
     start = time()
     hipo_offers = hipo_service.get_job_offers(job_title, job_location, page_number)
     end = time()
+    returned_json['hipo']['amount'] = len(hipo_offers)
+    returned_json['hipo']['time'] = float("{:.2f}".format(end - start))
     print(f"[INFO] - Extracted {len(hipo_offers)} offers from hipo.ro in {end - start} seconds")
 
     job_offers = indeed_offers + ejobs_offers + hipo_offers
-    return json.dumps(job_offers, indent=2, sort_keys=True, default=lambda x: shared_service.to_json(x))
+
+    returned_json['jobOffers'] = shared_service.serialize_list(job_offers)
+    return returned_json
 
 
 @app.route("/job/details", methods=['PUT'])
@@ -51,7 +63,7 @@ def get_job_description():
         print(f"[WARNING] No valid body included in request", e.args)
         abort(400, "No valid body included")
 
-    print(f"[INFO] - Gettting description from {job_offer.offer_link}")
+    print(f"[INFO] - Getting description from {job_offer.offer_link}")
     start = time()
     if job_offer.site == indeed_service.site:
         job_offer = indeed_service.get_job_details(job_offer)

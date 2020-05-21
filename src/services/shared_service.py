@@ -12,3 +12,10 @@ def check_page_number(page_number):
 
 def to_json(o):
     return {stringcase.camelcase(k): v for k, v in vars(o).items()}
+
+
+def serialize_list(unserialized_list):
+    serialized_list = []
+    for element in unserialized_list:
+        serialized_list.append(to_json(element))
+    return serialized_list
