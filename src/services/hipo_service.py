@@ -53,11 +53,20 @@ def _get_locations(job_row):
 
 
 def _get_description(soup):
-    content = soup.find("div", {"class": "content"})
-    if content is not None:
-        return str(content)
-    else:
-        return str(soup.find("div", {"id": "anunt-content"}))
+    content = ""
+    image_description = soup.find("div", {"id": "anunt-imagine"})
+    if image_description is not None:
+        content = str(image_description)
+        content = content.replace("/public/resources", "https://hipo.ro/public/resources")
+
+    description = soup.find("div", {"class": "content"})
+    if description is None:
+        description = soup.find("div", {"id": "anunt-content"})
+        if description is None:
+            return content
+    description = str(description)
+    content += description.replace("/public/resources", "https://hipo.ro/public/resources")
+    return content
 
 
 def _get_company_image(soup):

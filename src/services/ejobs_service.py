@@ -86,6 +86,9 @@ def _get_job_criteria(soup):
 def _get_job_description(soup):
     paragraphs = soup.findAll("div", {"class": "jobad-content-block"})
     full_description = ''
+    images_with_job_details = soup.findAll("div", {"id": "customJobImageContainer"})
+    for image in images_with_job_details:
+        full_description += str(image)
     for p in paragraphs:
         full_description += str(p)
     return full_description
