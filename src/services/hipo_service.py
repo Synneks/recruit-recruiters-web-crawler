@@ -2,11 +2,12 @@ import requests
 from bs4 import BeautifulSoup
 
 from entities.JobOffer import JobOffer
+from services import shared_service
 
 site = "hipo"
 
 
-def create_url(job_title, job_location, page_number):
+def _create_url(job_title, job_location, page_number):
     url = "https://www.hipo.ro/locuri-de-munca/cautajob/Toate-Domeniile/"
     if job_location is not None:
         url += f"{job_location}/"
@@ -21,7 +22,7 @@ def create_url(job_title, job_location, page_number):
 
 def get_job_offers(job_title, job_location, page_number):
     try:
-        url = create_url(job_title, job_location, page_number)
+        url = _create_url(job_title, job_location, page_number)
         page = requests.get(url)
         soup = BeautifulSoup(page.content, "html.parser")
 
@@ -34,15 +35,18 @@ def get_job_offers(job_title, job_location, page_number):
 
 def _create_job_offers(job_rows):
     job_offers = []
-    for job_row in job_rows:
-        title = job_row.find("span", {"itemprop": "title"}).get_text().strip()
-        company_name = job_row.find("span", {"itemprop": "name"}).get_text().strip()
-        offer_link = "https://www.hipo.ro" + job_row.find("a", {"class": "job-title"})["href"]
-        job_offer = JobOffer(title, company_name, site, offer_link)
-        job_offer.location = _get_locations(job_row)
-        job_offer.work_type = job_row.find("span", {"itemprop": "employmentType"}).get_text().strip()
-        job_offer.application_link = offer_link
-        job_offers.append(job_offer)
+    try:
+        for job_row in job_rows:
+            title = job_row.find("span", {"itemprop": "title"}).get_text().strip()
+            company_name = job_row.find("span", {"itemprop": "name"}).get_text().strip()
+            offer_link = "https://www.hipo.ro" + job_row.find("a", {"class": "job-title"})["href"]
+            job_offer = JobOffer(title, company_name, site, offer_link)
+            job_offer.location = _get_locations(job_row)
+            job_offer.work_type = job_row.find("span", {"itemprop": "employmentType"}).get_text().strip()
+            job_offer.application_link = offer_link
+            job_offers.append(job_offer)
+    except Exception as e:
+        shared_service.send_email(e)
     return job_offers
 
 
@@ -78,8 +82,11 @@ def _get_company_image(soup):
 
 
 def get_job_details(job_offer):
-    page = requests.get(job_offer.offer_link)
-    soup = BeautifulSoup(page.content, "html.parser")
-    job_offer.company_image = _get_company_image(soup)
-    job_offer.description = _get_description(soup)
+    try:
+        page = requests.get(job_offer.offer_link)
+        soup = BeautifulSoup(page.content, "html.parser")
+        job_offer.company_image = _get_company_image(soup)
+        job_offer.description = _get_description(soup)
+    except Exception as e:
+        shared_service.send_email(e)
     return job_offer

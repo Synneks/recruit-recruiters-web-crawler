@@ -3,11 +3,12 @@ from bs4 import BeautifulSoup
 
 from entities.JobOffer import JobOffer
 from exceptions import NoResultError
+from services import shared_service
 
 site = "indeed"
 
 
-def create_url(job_title, job_location, page_number):
+def _create_url(job_title, job_location, page_number):
     if job_title is None and job_location is None:
         raise NoResultError
     url = "https://ro.indeed.com/jobs"
@@ -23,7 +24,7 @@ def create_url(job_title, job_location, page_number):
 
 def get_job_offers(job_title, job_location, page_number):
     try:
-        url = create_url(job_title, job_location, page_number)
+        url = _create_url(job_title, job_location, page_number)
         page = requests.get(url)
         soup = BeautifulSoup(page.content, "html.parser")
 
@@ -38,21 +39,24 @@ def get_job_offers(job_title, job_location, page_number):
 
 def _create_job_offers(job_card_tags):
     job_offers = []
-    for job_card_tag in job_card_tags:
-        title_tag = job_card_tag.find("a", {"data-tn-element": "jobTitle"})
-        title = title_tag.get_text().strip()
-        company_name = job_card_tag.find("span", {"class": "company"}).get_text().strip()
-        offer_link = "http://ro.indeed.com" + str(title_tag.attrs["href"])
-        description_page_soup = _get_soup_from_page(offer_link)
-        job_offer = JobOffer(title, company_name, site, offer_link)
-        job_offer.application_link = _get_best_application_link(description_page_soup, offer_link)
-        location_tag = job_card_tag.find("span", {"class": "location"})
-        job_offer.location = location_tag.get_text().strip() if location_tag is not None else None
-        image_tag = description_page_soup.find("img", {"class": "jobsearch-CompanyAvatar-image"})
-        job_offer.company_image = image_tag.attrs["src"] if \
-            image_tag is not None \
-            else None
-        job_offers.append(job_offer)
+    try:
+        for job_card_tag in job_card_tags:
+            title_tag = job_card_tag.find("a", {"data-tn-element": "jobTitle"})
+            title = title_tag.get_text().strip()
+            company_name = job_card_tag.find("span", {"class": "company"}).get_text().strip()
+            offer_link = "http://ro.indeed.com" + str(title_tag.attrs["href"])
+            description_page_soup = _get_soup_from_page(offer_link)
+            job_offer = JobOffer(title, company_name, site, offer_link)
+            job_offer.application_link = _get_best_application_link(description_page_soup, offer_link)
+            location_tag = job_card_tag.find("span", {"class": "location"})
+            job_offer.location = location_tag.get_text().strip() if location_tag is not None else None
+            image_tag = description_page_soup.find("img", {"class": "jobsearch-CompanyAvatar-image"})
+            job_offer.company_image = image_tag.attrs["src"] if \
+                image_tag is not None \
+                else None
+            job_offers.append(job_offer)
+    except Exception as e:
+        shared_service.send_email(e)
     return job_offers
 
 
@@ -68,12 +72,15 @@ def _get_soup_from_page(job_card_link):
 
 
 def get_job_details(job_offer):
-    soup = _get_soup_from_page(job_offer.offer_link)
-    job_offer.description = str(
-        soup.find("div", {"class": "jobsearch-jobDescriptionText"}))  # scrape html code
-    work_type_tag = soup.findAll("span",
-                                 {"class": "jobsearch-JobMetadataHeader-iconLabel"})
-    job_offer.work_type = work_type_tag[1].get_text().strip() if \
-        len(work_type_tag) > 1 \
-        else None
+    try:
+        soup = _get_soup_from_page(job_offer.offer_link)
+        job_offer.description = str(
+            soup.find("div", {"class": "jobsearch-jobDescriptionText"}))  # scrape html code
+        work_type_tag = soup.findAll("span",
+                                     {"class": "jobsearch-JobMetadataHeader-iconLabel"})
+        job_offer.work_type = work_type_tag[1].get_text().strip() if \
+            len(work_type_tag) > 1 \
+            else None
+    except Exception as e:
+        shared_service.send_email(e)
     return job_offer
