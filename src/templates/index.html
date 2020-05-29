@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Routes Page</title>
+</head>
+<body>
+<h2>Official Recruit-Recruiters' scraper</h2>
+<p>Below you can find all the endpoints available (Note that this scraper is tightly coupled with the recruit-recruiters
+    frontend, thus making some requests confusing)</p>
+<ul>
+    <li>
+        <p>"/jobs" uses a GET request, which takes up to three query parameters named title, location and page. </p>
+        <p><strong>title</strong> stands for the job title</p>
+        <p><strong>location</strong> stands for the job location</p>
+        <p><strong>page</strong> stands for the page to scrape data on from every job hosting site that the app can
+            scrape </p>
+        <p>Example: "/jobs?title=Java&location=Cluj-Napoca&page=2" will return all the Java related offers from
+            Cluj-Napoca from page 2</p>
+        <p>Any of these params can be removed!</p>
+    </li>
+    <li>
+        <p>"/job/details" uses a PUT request, which needs a body under the form of a JSON object like:</p>
+        <p>
+            { <br>
+            "applicationLink": string, <br>
+            "companyImage": string, <br>
+            "companyName": string, <br>
+            "description": string, <br>
+            "jobTitle": string, <br>
+            "location": string, <br>
+            "offerLink": string, <br>
+            "site": string, <br>
+            "workType": string <br>
+            }
+        </p>
+        <p>The main key being offerLink. That is from where the details of the job like company Image or work type will
+            be scraped form.</p>
+    </li>
+</ul>
+</body>
+</html>
