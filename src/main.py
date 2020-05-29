@@ -90,4 +90,4 @@ if __name__ == '__main__':
     print("Loading .env...")
     dotenv.load_dotenv()
     print(".env loaded")
-    app.run()
+    app.run(host='0.0.0.0', port=80)
