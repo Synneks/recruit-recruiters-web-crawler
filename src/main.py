@@ -3,7 +3,7 @@ from time import time
 import dotenv
 import os
 
-from flask import Flask, request
+from flask import Flask, request, url_for, render_template
 from flask_cors import CORS
 from werkzeug.exceptions import abort
 
@@ -13,6 +13,16 @@ from services import shared_service
 
 app = Flask(__name__)
 CORS(app)
+
+
+@app.route("/")
+def main_page():
+    links = []
+    for rule in app.url_map.iter_rules():
+        if len(rule.defaults) >= len(rule.arguments):
+            url = url_for(rule.endpoint, **(rule.defaults or {}))
+            links.append((url, rule.endpoint))
+    return render_template("all_links.html", links=links)
 
 
 @app.route("/jobs")
