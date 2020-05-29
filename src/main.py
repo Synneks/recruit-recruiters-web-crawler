@@ -2,6 +2,7 @@ import json
 import operator
 from time import time
 import dotenv
+import os
 
 from flask import Flask, request, url_for, render_template
 from flask_cors import CORS
@@ -90,4 +91,4 @@ if __name__ == '__main__':
     print("Loading .env...")
     dotenv.load_dotenv()
     print(".env loaded")
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=int(os.getenv("PORT")))
