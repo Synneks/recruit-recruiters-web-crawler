@@ -1,4 +1,5 @@
 import requests
+import traceback
 from bs4 import BeautifulSoup
 
 from entities.JobOffer import JobOffer
@@ -56,7 +57,7 @@ def _create_job_offers(job_card_tags):
                 else None
             job_offers.append(job_offer)
     except Exception as e:
-        shared_service.send_email(e)
+        shared_service.send_email(e, traceback.format_exc())
     return job_offers
 
 
@@ -82,5 +83,5 @@ def get_job_details(job_offer):
             len(work_type_tag) > 1 \
             else None
     except Exception as e:
-        shared_service.send_email(e)
+        shared_service.send_email(e,traceback.format_exc())
     return job_offer

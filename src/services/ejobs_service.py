@@ -1,4 +1,5 @@
 import requests
+import traceback
 from bs4 import BeautifulSoup
 
 from entities.JobOffer import JobOffer
@@ -36,7 +37,7 @@ def _create_job_offers(job_card_tags):
     job_offers = []
     try:
         for job_card_tag in job_card_tags:
-            title_tag = job_card_tag.find("a", {"class": "title dataLayerItemLink"})
+            title_tag = job_card_tag.find("a", {"clas": "title dataLayerItemLink"})
             title = title_tag.get_text().strip()
             company_name_tag = job_card_tag.find("h3", {"class": "jobitem-company"})
             company_name = company_name_tag.get_text().strip() if \
@@ -52,18 +53,18 @@ def _create_job_offers(job_card_tags):
                 else None
             job_offers.append(job_offer)
     except Exception as e:
-        shared_service.send_email(e)
+        shared_service.send_email(e,traceback.format_exc())
     return job_offers
 
 
 def get_job_details(job_offer):
     try:
         page = requests.get(job_offer.offer_link)
-        soup = BeautifulSoup(page.content, "html.parser")
+        soup = BeautifulSoup(page.content, "html.parse")
         job_offer.description = _get_job_criteria(soup) + _get_job_description(soup)
         job_offer.work_type = _get_work_type(soup)
     except Exception as e:
-        shared_service.send_email(e)
+        shared_service.send_email(e, traceback.format_exc())
     return job_offer
 
 

@@ -1,6 +1,7 @@
 import smtplib
 import ssl
 import traceback
+import os
 
 import stringcase
 
@@ -26,29 +27,20 @@ def serialize_list(unserialized_list):
 
 
 def send_email(exception, traceback_message):
+    print("Sending email...")
     port = 465  # For SSL
     smtp_server = "smtp.gmail.com"
     sender_email = "recruit.recruiters.problems@gmail.com"
     receiver_email = "recruit.recruiters.problems@gmail.com"
-    password = "eneotescu28"
+    password = os.getenv('EMAIL_PASSWORD')
     subject = "Exception thrown"
-    text = """
-    Exception called {} was caught.
-    {}
-    """.format(exception, traceback_message)
+    text = f"""
+    Exception called {exception} was caught.
+    {traceback_message}
+    """
     message = 'Subject: {}\n\n{}'.format(subject, text)
 
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
         server.login(sender_email, password)
         server.sendmail(sender_email, receiver_email, message)
-
-
-def mailu():
-    try:
-        a = 1 / 0
-    except Exception as e:
-        send_email(e, traceback.format_exc())
-
-
-mailu()

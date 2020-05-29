@@ -1,5 +1,7 @@
 import json
 from time import time
+import dotenv
+import os
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -80,4 +82,7 @@ def get_job_description():
 
 
 if __name__ == '__main__':
+    print("Loading .env...")
+    dotenv.load_dotenv()
+    print(".env loaded")
     app.run(debug=True)

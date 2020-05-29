@@ -1,4 +1,5 @@
 import requests
+import traceback
 from bs4 import BeautifulSoup
 
 from entities.JobOffer import JobOffer
@@ -46,7 +47,7 @@ def _create_job_offers(job_rows):
             job_offer.application_link = offer_link
             job_offers.append(job_offer)
     except Exception as e:
-        shared_service.send_email(e)
+        shared_service.send_email(e, traceback.format_exc())
     return job_offers
 
 
@@ -88,5 +89,5 @@ def get_job_details(job_offer):
         job_offer.company_image = _get_company_image(soup)
         job_offer.description = _get_description(soup)
     except Exception as e:
-        shared_service.send_email(e)
+        shared_service.send_email(e, traceback.format_exc())
     return job_offer
