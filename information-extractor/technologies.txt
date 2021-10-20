@@ -1,0 +1,295 @@
+jQuery
+BackBoneJS
+D3.js
+React
+jQuery UI
+jQuery Mobile
+Underscore.js
+Moment.js
+Lodash
+Vue.js
+Bootstrap
+Foundation
+Semantic UI
+uikit
+Ruby on Rails
+AngularJS
+Ember.js
+Express
+Meteor
+Django
+ASP.net
+Laravel
+Zend Framework 2
+Phalcon
+Symfony
+CakePHP
+Flask
+CodeIgniter
+Grunt
+Gulp
+npm
+Bower
+webpack
+PHP
+NodeJS
+JavaScript
+HTML5
+Python
+Ruby
+Scala
+CSS3
+SQL
+Golang
+Rust
+Elixir
+TypeScript
+MySQL
+Sqlite
+MariaDB
+MongoDB
+Redis
+PostgreSQL
+Sass
+Less
+Stylus
+Atom
+Sublime Text
+Notepad++
+Visual Studio Code
+TextMate
+Coda 2
+WebStorm
+Vim
+Brackets
+Emacs
+Dreamweaver
+SpaceMacs
+StackEdit
+Dillinger
+Mou
+Texts
+Font Awesome
+IconMonster
+Icons8
+IconFinder
+Fontello
+Noun Project
+SourceTree
+GitKraken (Beta)
+Tower 2
+GitHub Client
+Gogs
+GitLab
+Nginx
+Apache
+IIS
+Caddy
+Runscope
+Zapier
+Postman
+SoapUI
+XAMPP
+MAMP
+WampServer
+Vagrant
+Laragon
+Slack
+Trello
+Glip
+Asana
+Jira
+SAP Advanced Planner and Optimizer
+SAP Analytics Cloud
+SAP ABAP
+SAP Apparel and Footwear Solution
+SAP Business Information Warehouse
+SAP Business ByDesign
+SAP Business Explorer
+SAP BusinessObjects Lumira
+SAP BusinessObjects Web Intelligence
+SAP Business One
+SAP Business Partner Screening
+SAP Business Intelligence
+SAP Business Workflow
+SAP Catalog Content Management
+SAP Cloud for Customer
+SAP Cost Center Accounting
+SAP Convergent Charging
+SAP Converged Cloud
+SAP Design Studio
+SAP PRD2(P2)
+SAP Enterprise Buyer Professional
+SAP Enterprise Learning
+SAP Portal
+SAP Extended Warehouse Management
+Enterprise Central Component
+SAP ERP
+SAP HANA
+SAP Human Resource Management Systems
+SAP SuccessFactors
+SAP Litmos Training Cloud
+SAP Information Design Tool
+SAP Integrated Business Planning
+SAP Internet Transaction Server
+SAP Incentive and Commission Management
+SAP IT Operations Analytics
+SAP Jam
+SAP Knowledge Warehouse
+SAP Manufacturing
+SAP Marketing Cloud
+SAP Materials Management
+SAP Master Data Management
+SAP Plant Maintenance
+SAP Production Planning
+SAP Product Lifecycle Costing
+SAP Profitability and Cost Management
+SAP Project System
+SAP Rapid Deployment Solutions
+SAP Service and Asset Management
+SAP Supply Network Collaboration
+SAP Solutions for mobile business
+SAP Sales and Distribution
+SAP Solution Composer
+SAP Strategic Enterprise Management
+SAP Test Data Migration Server
+SAP Training and Event Management
+SAP NetWeaver Application Server
+SAP xApps
+SAP Sales Cloud
+SAP Supply Chain Performance Management
+SAP Supply Chain Management
+SAP Sustainability Performance Management
+SAP S/4HANA
+SAP Master Data Governance
+SAP S/4HANA Cloud
+ASP.NET Core
+SQL Server Database
+MVC
+.NET Core
+Entity Framework
+C#
+Microservices
+Web API
+Blazor
+Microsoft Azure
+Microsoft SharePoint Framework
+Microsoft Office 365
+MS SQL
+Rational Rose
+MS Visio
+NetBeans
+Open Office Draw
+Star UML
+Together
+Requirements’ matrix
+Agile
+Scrum
+Kamban
+Scrumban
+RUP
+DSDM
+Selenium
+Protractor
+Ranorex
+Meter
+JBehave
+Testing Anywhere
+WebUI Test Studio
+TestComplete
+SOAP UI
+EasyMock
+Mockito
+jMock
+WebUI test Tool
+TCMS
+Cucumber
+ProjectLocker
+Amazon Web Services
+Jenkins
+Bamboo
+Mavent
+Ant
+Apache Tomcat
+JBoss AS
+Jetty
+IBM WebShere
+Oracle Application Server
+WebLogic
+Windows Server IIS
+Nginx
+Eclipse
+Idea
+Aptana Studio
+XCode
+React Native
+PhoneGap
+iPhone SDK
+Android SDK
+Xamarin
+JQuery Mobile
+JEE
+Spring
+Spring Security
+Spring Boot
+JPA
+Hibernate
+Flyway
+Swing
+JSF
+Apache Wicket
+Velocity
+GWT
+JXL
+Oracle Portal
+CodeIgniter
+Laravel
+Symphony
+Zend
+Yii
+WordPress
+Joomla
+Drupal
+Magento
+Prestashop
+Microsoft Visual Studio
+Telerik Framework
+Entity Framework
+ASP Web API
+WinForms
+ASP.NET MVC
+Neodynamic SDK
+Visual Basic
+Windows API
+ActiveX
+XCode
+wxWidgets
+STL
+WinDDK
+Qt Framework
+Microsoft CRM
+Bootstrap
+Typescript
+D3.js
+XHTML
+HTML5
+XML
+XSL
+XPath
+XQuery
+SAX
+DOM
+StAX
+TinyMCE
+JW Player
+Highcharts
+amCharts
+Modernizr
+Oauth2 security
+Omniauth security
+C
+C++
+Java
+Python 2
+Python 3
+CMake
